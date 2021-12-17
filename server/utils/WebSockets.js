@@ -8,6 +8,7 @@ class WebSockets {
         socketId: client.id,
         userId: userId,
       });
+      console.log(users)
     });
 
     client.on("alertPartnerOnline", (userID) => {
@@ -56,12 +57,20 @@ class WebSockets {
       }
      });
 
+
     // event fired when the chat room is disconnected
     client.on("disconnect", () => {
       users = users.filter((user) => user.socketId !== client.id);
+      console.log(users)
       client.broadcast.emit("isPartnerOnline", false )
     });
 
+
+    client.on("broadcastOnlineUser", (chatID) => {
+      // users = users.filter((user) => user.socketId !== client.id);
+      console.log(chatID, " broadcast Online User")
+      client.broadcast.emit("broadcastOnlineStatus", chatID )
+    });
 
     // subscribe person to chat & other user as well
     client.on("subscribe", (room, otherUserId = "") => {
